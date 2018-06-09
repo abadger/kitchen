@@ -4,8 +4,11 @@
 from distutils.command.sdist import sdist as _sdist
 import glob
 import os
+import sys
 
 from setuptools import find_packages, setup
+
+sys.path.insert(0, 'kitchen%s' % sys.version_info[0])
 import kitchen.release
 
 import releaseutils
