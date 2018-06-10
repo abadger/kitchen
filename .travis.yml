@@ -6,10 +6,22 @@ python:
  - "3.5"
  - "3.6"
  - "3.7"
+
 install: python setup.py develop
 script: ./runtests.sh
+
 notifications:
     irc:
         - "irc.freenode.net#threebean"
     on_success: never
     on_failure: always
+
+# Install the portuguese language pack so that locale.getpreferredencoding() will use utf8.
+addons:
+  apt:
+    packages:
+    - language-pack-pt
+
+# Also generate the pt_BR locale for latin-1 encoding
+before_install:
+  - 'sudo locale-gen pt_BR'
