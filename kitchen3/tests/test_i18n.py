@@ -229,6 +229,13 @@ class TestDummyTranslations(base_classes.UnicodeTestData):
     def check_lgettext(self, message, value, charset=None,
             locale='en_US.UTF-8'):
         os.environ['LC_ALL'] = locale
+        if locale == 'C':
+            # We use the C locale to test an ascii-only locale.  On Python-3.7+, the C locale is
+            # coerced to UTF-8.  Turn that off so that we test that the ascii C locale will work on
+            # older Python versions
+            os.environ['PYTHONUTF8'] = '0'  # PEP 538
+            os.environ['PYTHONCOERCECLOCALE'] = '0'  # PEP 540
+
         self.translations.set_output_charset(charset)
         tools.eq_(self.translations.lgettext(message), value,
                 msg='lgettext(%s): trans: %s != val: %s (charset=%s, locale=%s)'
@@ -254,7 +261,15 @@ class TestDummyTranslations(base_classes.UnicodeTestData):
 
     def check_lngettext(self, message, value, charset=None, locale='en_US.UTF-8'):
         os.environ['LC_ALL'] = locale
+        if locale == 'C':
+            # We use the C locale to test an ascii-only locale.  On Python-3.7+, the C locale is
+            # coerced to UTF-8.  Turn that off so that we test that the ascii C locale will work on
+            # older Python versions
+            os.environ['PYTHONUTF8'] = '0'  # PEP 538
+            os.environ['PYTHONCOERCECLOCALE'] = '0'  # PEP 540
+
         self.translations.set_output_charset(charset)
+
         tools.eq_(self.translations.lngettext(message, 'blank', 1), value,
                 msg='lngettext(%s, "blank", 1): trans: %s != val: %s (charset=%s, locale=%s)'
                 % (repr(message), repr(self.translations.lngettext(message,
